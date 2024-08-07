@@ -9,7 +9,7 @@
 Esse comando irá criar um container com um banco de dados PostgreSQL, caso
 ele já existe, ele apenas inicia o banco de dados sem criar um novo.
 
-Agora, crie um ambiente virtual e instale o pacote necessário especificado
+Agora, crie um ambiente virtual e instale os pacotes necessários especificados
 no arquivo `requirements.txt`:
 
 ```bash
