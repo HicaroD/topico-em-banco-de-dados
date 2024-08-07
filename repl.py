@@ -20,28 +20,31 @@ class Repl:
         self.query_file.close()
 
     def _execute_sql_query(self, raw_query: str) -> None:
-        query = raw_query.split()
-        if len(query) < 1:
-            print("error: invalid query")
-            return
+        try:
+            query = raw_query.split()
+            if len(query) < 1:
+                print("error: invalid query")
+                return
 
-        query = " ".join(query[1:])
+            query = " ".join(query[1:])
 
-        self.query_file.write("-------------\n")
-        self.query_file.write(f"SQL: {query}\n")
-        self.query_file.write("-------------\n")
+            self.query_file.write("-------------\n")
+            self.query_file.write(f"SQL: {query}\n")
+            self.query_file.write("-------------\n")
 
-        with self.con.cursor() as cursor:
-            cursor.execute(query)
-            self.con.commit()
-            rows = cursor.fetchall()
-            self.query_file.write("RESULT: \n")
-            if rows:
-                for row in rows:
-                    print(row)
-                    self.query_file.write(f"{row}\n")
-            else:
-                self.query_file.write("No results\n")
+            with self.con.cursor() as cursor:
+                cursor.execute(query)
+                self.con.commit()
+                rows = cursor.fetchall()
+                self.query_file.write("RESULT: \n")
+                if rows:
+                    for row in rows:
+                        print(row)
+                        self.query_file.write(f"{row}\n")
+                else:
+                    self.query_file.write("No results\n")
+        except Exception as e:
+            print(f"error:\n{e}")
 
     def _connect_to_database(self):
         con = psycopg2.connect(
