@@ -4,7 +4,7 @@ import psycopg2
 class Repl:
     def __init__(self, db_url: str):
         self.db_url = db_url
-        self.query_file = open("query_file.txt", "w")
+        self.query_file = open("query_file.txt", "a")
         self.con = self._connect_to_database()
         self._setup_database()
 
@@ -26,6 +26,8 @@ class Repl:
             return
 
         query = " ".join(query[1:])
+
+        self.query_file.write("-------------\n")
         self.query_file.write(f"SQL: {query}\n")
         self.query_file.write("-------------\n")
 
@@ -33,10 +35,10 @@ class Repl:
             cursor.execute(query)
             self.con.commit()
             rows = cursor.fetchall()
-            print(rows)
             self.query_file.write("RESULT: \n")
             if rows:
                 for row in rows:
+                    print(row)
                     self.query_file.write(f"{row}\n")
             else:
                 self.query_file.write("No results\n")
